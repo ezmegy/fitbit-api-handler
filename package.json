@@ -15,7 +15,7 @@
   "main": "dist/index.js",
   "module": "es/index.js",
   "jsnext:main": "es/index.js",
-  "types": "dist/index.d.ts",
+  "types": "typings",
   "scripts": {
     "build": "rollup --config ./rollup.config.js",
     "develop": "tsc --emitDeclarationOnly false --watch",

@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "declaration": true,
+    "declarationDir": "./typings",
     "emitDeclarationOnly": true,
     "outDir": "./dist",
     "baseUrl": ".",

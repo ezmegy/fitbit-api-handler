@@ -1,0 +1,11 @@
+export declare enum ActivityType {
+    BIKE = 90001,
+    RUNNING = 90009,
+    FENCING = 15200,
+    WALKING = 90013,
+    SKATEBOARDING = 15580,
+    YOGA = 52000,
+    SWIMMING = 90024,
+    WEIGHT_TRAINING = 2131,
+    CIRKUIT_TRAINING = 2040
+}
