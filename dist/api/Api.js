@@ -296,7 +296,7 @@ class Api extends restApiHandler.Api {
 
 
   async getWeightsBetweenDates(from, to = luxon.DateTime.fromMillis(Date.now())) {
-    return this.requestWeightData(this.getApiUrl(`body/weight/date/${from.toFormat(this.dateFormat)}/${to.toFormat(this.dateFormat)}`, undefined, '1'));
+    return this.requestWeightData(this.getApiUrl(`body/log/weight/date/${from.toFormat(this.dateFormat)}/${to.toFormat(this.dateFormat)}`, undefined, '1'));
   }
 
   async getActivity(activityId) {

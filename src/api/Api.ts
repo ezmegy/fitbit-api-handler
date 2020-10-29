@@ -343,7 +343,7 @@ export default class Api extends ApiBase<ApiResponseType<any>> {
     * @param to the last day of the period to query, defaults to Date.now()
     */
     public async getWeightsBetweenDates(from: DateTime, to: DateTime = DateTime.fromMillis(Date.now())): Promise<WeightProcessedResponse> {
-        return this.requestWeightData(this.getApiUrl(`body/weight/date/${from.toFormat(this.dateFormat)}/${to.toFormat(this.dateFormat)}`, undefined, '1'));
+        return this.requestWeightData(this.getApiUrl(`body/log/weight/date/${from.toFormat(this.dateFormat)}/${to.toFormat(this.dateFormat)}`, undefined, '1'));
     }
 
     public async getActivity(activityId: number): Promise<Activity<number, ApiActivity>> {
