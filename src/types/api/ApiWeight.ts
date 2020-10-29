@@ -14,10 +14,6 @@ export interface ApiWeight {
     source: WeightSource
 }
 
-export interface ApiWeightTransformed extends ApiWeight {
-    dateTime: DateTime
-}
-
 export interface WeightProcessedResponse {
-    weight: ApiWeightTransformed[]
+    weights: ApiWeight[]
 }

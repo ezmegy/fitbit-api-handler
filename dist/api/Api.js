@@ -270,19 +270,12 @@ class Api extends restApiHandler.Api {
   }
 
   async requestWeightData(url, query) {
-    console.log(`url: ${url}`);
     const {
       data
     } = await this.get(url, query);
-    console.log(data);
-    console.log(JSON.stringify(data));
     return {
-      weight: data.weight.map(weight => {
-        return _objectSpread(_objectSpread({}, weight), {}, {
-          dateTime: luxon.DateTime.fromISO(weight.date + `T${weight.time}`, {
-            zone: 'UTC+0'
-          })
-        });
+      weights: data.weight.map(weight => {
+        return _objectSpread({}, weight);
       })
     };
   }

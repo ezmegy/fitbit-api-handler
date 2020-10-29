@@ -320,16 +320,12 @@ export default class Api extends ApiBase<ApiResponseType<any>> {
     }
 
     private async requestWeightData(url: string, query?: Record<string, any>): Promise<WeightProcessedResponse> {
-        console.log(`url: ${url}`)
         const { data } = await this.get(url, query);
-        console.log(data)
-        console.log(JSON.stringify(data))
 
         return {
-            weight: data.weight.map((weight: ApiWeight) => {
+            weights: data.weight.map((weight: ApiWeight) => {
                 return {
-                    ...weight,
-                    dateTime: DateTime.fromISO(weight.date + `T${weight.time}`, { zone: 'UTC+0' }),
+                    ...weight
                 };
             }),
         };

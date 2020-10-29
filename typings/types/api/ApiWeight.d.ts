@@ -1,4 +1,3 @@
-import { DateTime } from 'luxon';
 export declare enum WeightSource {
     api = "API",
     aria = "Aria"
@@ -11,9 +10,6 @@ export interface ApiWeight {
     weight: number;
     source: WeightSource;
 }
-export interface ApiWeightTransformed extends ApiWeight {
-    dateTime: DateTime;
-}
 export interface WeightProcessedResponse {
-    weight: ApiWeightTransformed[];
+    weights: ApiWeight[];
 }
