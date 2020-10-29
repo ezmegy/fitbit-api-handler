@@ -269,6 +269,34 @@ class Api extends restApiHandler.Api {
     return this.requestSleepData(this.getApiUrl('sleep/list', undefined, '1.2'), this.processDateFilters(filters));
   }
 
+  async requestWeightData(url, query) {
+    console.log(`url: ${url}`);
+    const {
+      data
+    } = await this.get(url, query);
+    return {
+      weight: data.weight.map(weight => {
+        return _objectSpread(_objectSpread({}, weight), {}, {
+          dateTime: luxon.DateTime.fromISO(weight.date + `T${weight.time}`, {
+            zone: 'UTC+0'
+          })
+        });
+      })
+    };
+  }
+  /**
+  * Gets the weights from the period specified by from and to params.
+  * Note: the period shouldn't be longer than 31 days.
+  * 
+  * @param from the first day of the period to query
+  * @param to the last day of the period to query, defaults to Date.now()
+  */
+
+
+  async getWeightsBetweenDates(from, to = luxon.DateTime.fromMillis(Date.now())) {
+    return this.requestWeightData(this.getApiUrl(`body/weight/date/${from.toFormat(this.dateFormat)}/${to.toFormat(this.dateFormat)}`, undefined, '1'));
+  }
+
   async getActivity(activityId) {
     const {
       data

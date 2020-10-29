@@ -1,5 +1,6 @@
 import { DateTime, Duration } from 'luxon';
 import { Api as ApiBase, ApiResponseType } from 'rest-api-handler';
+import { WeightProcessedResponse } from '../types/api/ApiWeight';
 import { IntradayResource } from '../constants/intraday-resources';
 import { ApiScope } from '../constants/scopes';
 import { SubscriptionCollection } from '../constants/subscription-collections';
@@ -83,6 +84,7 @@ export default class Api extends ApiBase<ApiResponseType<any>> {
         rateReset: Duration | undefined;
     };
     request(...parameters: ArgumentsType<typeof ApiBase.prototype.request>): Promise<ApiResponseType<any>>;
+    private getDateString;
     private getDateTimeString;
     setAccessToken(token: string): void;
     getAccessToken(): string | null;
@@ -103,6 +105,15 @@ export default class Api extends ApiBase<ApiResponseType<any>> {
     private requestSleepData;
     getSleep(date: DateTime): Promise<SingleDayProcessedResponse>;
     getSleeps(filters: ApiDateFilters): Promise<SleepProcessedResponse>;
+    private requestWeightData;
+    /**
+    * Gets the weights from the period specified by from and to params.
+    * Note: the period shouldn't be longer than 31 days.
+    *
+    * @param from the first day of the period to query
+    * @param to the last day of the period to query, defaults to Date.now()
+    */
+    getWeightsBetweenDates(from: DateTime, to?: DateTime): Promise<WeightProcessedResponse>;
     getActivity(activityId: number): Promise<Activity<number, ApiActivity>>;
     getActivityTcx(activityId: number): Promise<string>;
     getActivities(filters: ApiActivityFilters): Promise<ActivityResponse>;

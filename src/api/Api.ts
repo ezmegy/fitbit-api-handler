@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import { DateTime, Duration } from 'luxon';
 import { parseUrl } from 'query-string';
 import { Api as ApiBase, ApiResponseType, DefaultResponseProcessor } from 'rest-api-handler';
+import { ApiWeight, WeightProcessedResponse } from '../types/api/ApiWeight';
 import { IntradayResource } from '../constants/intraday-resources';
 import { ApiScope } from '../constants/scopes';
 import { SubscriptionCollection } from '../constants/subscription-collections';
@@ -316,6 +317,31 @@ export default class Api extends ApiBase<ApiResponseType<any>> {
 
     public async getSleeps(filters: ApiDateFilters): Promise<SleepProcessedResponse> {
         return this.requestSleepData(this.getApiUrl('sleep/list', undefined, '1.2'), this.processDateFilters(filters));
+    }
+
+    private async requestWeightData(url: string, query?: Record<string, any>): Promise<WeightProcessedResponse> {
+        console.log(`url: ${url}`)
+        const { data } = await this.get(url, query);
+
+        return {
+            weight: data.weight.map((weight: ApiWeight) => {
+                return {
+                    ...weight,
+                    dateTime: DateTime.fromISO(weight.date + `T${weight.time}`, { zone: 'UTC+0' }),
+                };
+            }),
+        };
+    }
+
+    /**
+    * Gets the weights from the period specified by from and to params.
+    * Note: the period shouldn't be longer than 31 days.
+    * 
+    * @param from the first day of the period to query
+    * @param to the last day of the period to query, defaults to Date.now()
+    */
+    public async getWeightsBetweenDates(from: DateTime, to: DateTime = DateTime.fromMillis(Date.now())): Promise<WeightProcessedResponse> {
+        return this.requestWeightData(this.getApiUrl(`body/weight/date/${from.toFormat(this.dateFormat)}/${to.toFormat(this.dateFormat)}`, undefined, '1'));
     }
 
     public async getActivity(activityId: number): Promise<Activity<number, ApiActivity>> {
