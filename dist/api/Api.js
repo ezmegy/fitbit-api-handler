@@ -274,6 +274,8 @@ class Api extends restApiHandler.Api {
     const {
       data
     } = await this.get(url, query);
+    console.log(data);
+    console.log(JSON.stringify(data));
     return {
       weight: data.weight.map(weight => {
         return _objectSpread(_objectSpread({}, weight), {}, {
