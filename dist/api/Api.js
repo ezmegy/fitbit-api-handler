@@ -296,7 +296,6 @@ class Api extends restApiHandler.Api {
     const {
       data
     } = await this.get(url, query);
-    console.log(data);
     const activitiesHeart = data['activities-heart'];
     return {
       heartData: activitiesHeart.map(hr => {
@@ -314,7 +313,6 @@ class Api extends restApiHandler.Api {
     const {
       data
     } = await this.get(url, query);
-    console.log(data);
     const activitiesHeart = data['activities-heart'];
     const activitiesHeartIntraday = data['activities-heart-intraday'];
     return {

@@ -344,8 +344,7 @@ export default class Api extends ApiBase<ApiResponseType<any>> {
     }
 
     private async requestHeartRateData(url: string, query?: Record<string, any>): Promise<HeartRateProcessedResponse> {
-        const { data } = await this.get(url, query);
-        console.log(data)
+        const { data } = await this.get(url, query)
 
         const activitiesHeart: ApiHeartRate[] = data['activities-heart']
         return {
@@ -361,8 +360,7 @@ export default class Api extends ApiBase<ApiResponseType<any>> {
     }
 
     private async requestHeartRateIntradayData(url: string, query?: Record<string, any>): Promise<HeartRateIntradayProcessedResponse> {
-        const { data } = await this.get(url, query);
-        console.log(data)
+        const { data } = await this.get(url, query)
 
         const activitiesHeart: ApiHeartRate[] = data['activities-heart']
         const activitiesHeartIntraday: ApiHeartRateIntraday = data['activities-heart-intraday']
