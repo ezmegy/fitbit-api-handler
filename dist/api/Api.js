@@ -292,6 +292,54 @@ class Api extends restApiHandler.Api {
     return this.requestWeightData(this.getApiUrl(`body/log/weight/date/${from.toFormat(this.dateFormat)}/${to.toFormat(this.dateFormat)}`, undefined, '1'));
   }
 
+  async requestHeartRateData(url, query) {
+    const {
+      data
+    } = await this.get(url, query);
+    console.log(data);
+    const activitiesHeart = data['activities-heart'];
+    return {
+      heartData: activitiesHeart.map(hr => {
+        return {
+          dateTime: hr.dateTime,
+          customHeartRateZones: hr.value.customHeartRateZones,
+          heartRateZones: hr.value.heartRateZones,
+          restingHeartRate: hr.value.restingHeartRate
+        };
+      })
+    };
+  }
+
+  async requestHeartRateIntradayData(url, query) {
+    const {
+      data
+    } = await this.get(url, query);
+    console.log(data);
+    const activitiesHeart = data['activities-heart'];
+    const activitiesHeartIntraday = data['activities-heart-intraday'];
+    return {
+      heartData: activitiesHeart.map(hr => {
+        return {
+          dateTime: hr.dateTime,
+          customHeartRateZones: hr.value.customHeartRateZones,
+          heartRateZones: hr.value.heartRateZones,
+          restingHeartRate: hr.value.restingHeartRate
+        };
+      }),
+      heartIntradayData: activitiesHeartIntraday.dataset.map(hri => {
+        return _objectSpread({}, hri);
+      })
+    };
+  }
+
+  async getHeartRateBetweenDates(from, to = luxon.DateTime.fromMillis(Date.now()), detailLevel = 'min') {
+    return this.requestHeartRateData(this.getApiUrl(`activities/heart/date/${from.toFormat(this.dateFormat)}/${to.toFormat(this.dateFormat)}/1${detailLevel}`, undefined, '1'));
+  }
+
+  async getHeartRateIntraday(on, detailLevel = 'min') {
+    return this.requestHeartRateIntradayData(this.getApiUrl(`activities/heart/date/${on.toFormat(this.dateFormat)}/today/1${detailLevel}`, undefined, '1'));
+  }
+
   async getActivity(activityId) {
     const {
       data

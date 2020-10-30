@@ -7,6 +7,7 @@ import { SubscriptionCollection } from '../constants/subscription-collections';
 import { Activity } from '../models';
 import { ApiActivity, ApiActivityFilters, ApiDateFilters, ApiToken } from '../types/api';
 import { SingleDayProcessedResponse, SleepProcessedResponse } from '../types/api/ApiSleep';
+import { HeartRateIntradayProcessedResponse, HeartRateProcessedResponse } from 'src/types/api/ApiHeartRate';
 declare type ResponseType = 'code' | 'token';
 declare type Prompt = 'consent' | 'login' | 'login consent' | 'none';
 declare type DetailLevel = '1sec' | '1min' | '15min';
@@ -114,6 +115,10 @@ export default class Api extends ApiBase<ApiResponseType<any>> {
     * @param to the last day of the period to query, defaults to Date.now()
     */
     getWeightsBetweenDates(from: DateTime, to?: DateTime): Promise<WeightProcessedResponse>;
+    private requestHeartRateData;
+    private requestHeartRateIntradayData;
+    getHeartRateBetweenDates(from: DateTime, to?: DateTime, detailLevel?: 'sec' | 'min'): Promise<HeartRateProcessedResponse>;
+    getHeartRateIntraday(on: DateTime, detailLevel?: 'sec' | 'min'): Promise<HeartRateIntradayProcessedResponse>;
     getActivity(activityId: number): Promise<Activity<number, ApiActivity>>;
     getActivityTcx(activityId: number): Promise<string>;
     getActivities(filters: ApiActivityFilters): Promise<ActivityResponse>;

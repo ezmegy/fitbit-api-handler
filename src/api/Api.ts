@@ -13,6 +13,7 @@ import { Activity } from '../models';
 import { ApiActivity, ApiActivityFilters, ApiDateFilters, ApiSleep, ApiToken } from '../types/api';
 import { SingleDayProcessedResponse, SleepProcessedResponse } from '../types/api/ApiSleep';
 import ResponseProcessor from './ResponseProcessor';
+import { ApiHeartRate, ApiHeartRateIntraday, ApiHeartRateIntradayEntry, ApiHeartRateTransformed, ApiHeartRateZone, HeartRateIntradayProcessedResponse, HeartRateProcessedResponse } from 'src/types/api/ApiHeartRate';
 
 type ResponseType = 'code' | 'token';
 type Prompt = 'consent' | 'login' | 'login consent' | 'none';
@@ -340,6 +341,52 @@ export default class Api extends ApiBase<ApiResponseType<any>> {
     */
     public async getWeightsBetweenDates(from: DateTime, to: DateTime = DateTime.fromMillis(Date.now())): Promise<WeightProcessedResponse> {
         return this.requestWeightData(this.getApiUrl(`body/log/weight/date/${from.toFormat(this.dateFormat)}/${to.toFormat(this.dateFormat)}`, undefined, '1'));
+    }
+
+    private async requestHeartRateData(url: string, query?: Record<string, any>): Promise<HeartRateProcessedResponse> {
+        const { data } = await this.get(url, query);
+        console.log(data)
+
+        const activitiesHeart: ApiHeartRate[] = data['activities-heart']
+        return {
+            heartData: activitiesHeart.map((hr: ApiHeartRate) => {
+                return {
+                    dateTime: hr.dateTime,
+                    customHeartRateZones: hr.value.customHeartRateZones,
+                    heartRateZones: hr.value.heartRateZones,
+                    restingHeartRate: hr.value.restingHeartRate
+                }
+            })
+        };
+    }
+
+    private async requestHeartRateIntradayData(url: string, query?: Record<string, any>): Promise<HeartRateIntradayProcessedResponse> {
+        const { data } = await this.get(url, query);
+        console.log(data)
+
+        const activitiesHeart: ApiHeartRate[] = data['activities-heart']
+        const activitiesHeartIntraday: ApiHeartRateIntraday = data['activities-heart-intraday']
+        return {
+            heartData: activitiesHeart.map((hr: ApiHeartRate) => {
+                return {
+                    dateTime: hr.dateTime,
+                    customHeartRateZones: hr.value.customHeartRateZones,
+                    heartRateZones: hr.value.heartRateZones,
+                    restingHeartRate: hr.value.restingHeartRate
+                }
+            }),
+            heartIntradayData: activitiesHeartIntraday.dataset.map((hri: ApiHeartRateIntradayEntry) => {
+                return { ...hri }
+            })
+        };
+    }
+
+    public async getHeartRateBetweenDates(from: DateTime, to: DateTime = DateTime.fromMillis(Date.now()), detailLevel: 'sec' | 'min' = 'min'): Promise<HeartRateProcessedResponse> {
+        return this.requestHeartRateData(this.getApiUrl(`activities/heart/date/${from.toFormat(this.dateFormat)}/${to.toFormat(this.dateFormat)}/1${detailLevel}`, undefined, '1'))
+    }
+
+    public async getHeartRateIntraday(on: DateTime, detailLevel: 'sec' | 'min' = 'min'): Promise<HeartRateIntradayProcessedResponse> {
+        return this.requestHeartRateIntradayData(this.getApiUrl(`activities/heart/date/${on.toFormat(this.dateFormat)}/today/1${detailLevel}`, undefined, '1'))
     }
 
     public async getActivity(activityId: number): Promise<Activity<number, ApiActivity>> {
