@@ -1,5 +1,3 @@
-import { DateTime } from 'luxon'
-
 export enum WeightSource {
     api = 'API',
     aria = 'Aria'
