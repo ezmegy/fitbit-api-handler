@@ -337,7 +337,7 @@ class Api extends restApiHandler.Api {
   }
 
   async getHeartRateIntraday(on, detailLevel = 'min') {
-    return this.requestHeartRateIntradayData(this.getApiUrl(`activities/heart/date/${on.toFormat(this.dateFormat)}/today/1${detailLevel}`, undefined, '1'));
+    return this.requestHeartRateIntradayData(this.getApiUrl(`activities/heart/date/${on.toFormat(this.dateFormat)}/1d/1${detailLevel}`, undefined, '1'));
   }
 
   async getActivity(activityId) {

@@ -386,7 +386,7 @@ export default class Api extends ApiBase<ApiResponseType<any>> {
     }
 
     public async getHeartRateIntraday(on: DateTime, detailLevel: 'sec' | 'min' = 'min'): Promise<HeartRateIntradayProcessedResponse> {
-        return this.requestHeartRateIntradayData(this.getApiUrl(`activities/heart/date/${on.toFormat(this.dateFormat)}/today/1${detailLevel}`, undefined, '1'))
+        return this.requestHeartRateIntradayData(this.getApiUrl(`activities/heart/date/${on.toFormat(this.dateFormat)}/1d/1${detailLevel}`, undefined, '1'))
     }
 
     public async getActivity(activityId: number): Promise<Activity<number, ApiActivity>> {
